@@ -183,6 +183,7 @@ export const makeMessagesRecvSocket = (config: SocketConfig) => {
     toJid,
     isVideo,
   };
+ }
     
 	const rejectCall = async(callId: string, callFrom: string) => {
 		const stanza: BinaryNode = ({
