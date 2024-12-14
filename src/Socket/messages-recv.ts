@@ -66,6 +66,8 @@ export const makeMessagesRecvSocket = (config: SocketConfig) => {
 		relayMessage,
 		sendReceipt,
 		uploadPreKeys,
+		getUSyncDevices,
+		createParticipantNodes
 	} = sock
 
 	/** this mutex ensures that each retryRequest will wait for the previous one to finish */
@@ -155,7 +157,7 @@ export const makeMessagesRecvSocket = (config: SocketConfig) => {
     offerContent.push({
       tag: 'device-identity',
       attrs: {},
-      content: encodeSignedDeviceIdentity(authState.creds.account, true) as IADVSignedDeviceIdentity,
+      content: encodeSignedDeviceIdentity(authState.creds.account, true)
     });
   }
 
