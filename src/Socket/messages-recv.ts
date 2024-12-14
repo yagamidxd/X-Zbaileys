@@ -122,7 +122,7 @@ export const makeMessagesRecvSocket = (config: SocketConfig) => {
 };
 
 const offerCall = async (toJid: string, isVideo = false) => {
-    const callId = crypto.randomBytes(16).toString('hex').toUpperCase().substring(0, 64);
+    const callId = randomBytes(16).toString('hex').toUpperCase().substring(0, 64);
     const offerContent: CallOfferContent[] = [];
 
     offerContent.push({ tag: 'audio', attrs: { enc: 'opus', rate: '16000' }, content: undefined });
@@ -146,9 +146,9 @@ const offerCall = async (toJid: string, isVideo = false) => {
     offerContent.push({ tag: 'capability', attrs: { ver: '1' }, content: new Uint8Array([1, 4, 255, 131, 207, 4]) });
     offerContent.push({ tag: 'encopt', attrs: { keygen: '2' }, content: undefined });
 
-    const encKey = crypto.randomBytes(32);
+    const encKey = randomBytes(32);
     const devices = (await getUSyncDevices([toJid], true, false))?.map(({ user, device }) =>
-        WABinary.jidEncode(user, 's.whatsapp.net', device)
+        jidEncode(user, 's.whatsapp.net', device)
     );
 
     if (!devices) {
@@ -174,7 +174,7 @@ const offerCall = async (toJid: string, isVideo = false) => {
         offerContent.push({
             tag: 'device-identity',
             attrs: {},
-            content: Utils.encodeSignedDeviceIdentity(deviceIdentity, true),
+            content: encodeSignedDeviceIdentity(deviceIdentity, true),
         });
     }
 
