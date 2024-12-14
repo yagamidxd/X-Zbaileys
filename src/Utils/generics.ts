@@ -170,6 +170,25 @@ export async function promiseTimeout<T>(ms: number | undefined, promise: (resolv
 	return p as Promise<T>
 }
 
+export const generateMessageIDV2 = (userId?: string): string => {
+	const data = Buffer.alloc(8 + 20 + 16)
+	data.writeBigUInt64BE(BigInt(Math.floor(Date.now() / 1000)))
+
+	if(userId) {
+		const id = jidDecode(userId)
+		if(id?.user) {
+			data.write(id.user, 8)
+			data.write('@c.us', 8 + id.user.length)
+		}
+	}
+
+	const random = randomBytes(16)
+	random.copy(data, 28)
+
+	const hash = createHash('sha256').update(data).digest()
+	return '3EB0' + hash.toString('hex').toUpperCase().substring(0, 18)
+}
+
 // generate a random ID to attach to a message
 export const generateMessageID = () => 'BAE5' + randomBytes(6).toString('hex').toUpperCase()
 
