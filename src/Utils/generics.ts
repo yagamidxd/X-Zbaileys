@@ -1,12 +1,12 @@
 import { Boom } from '@hapi/boom'
 import axios, { AxiosRequestConfig } from 'axios'
-import { randomBytes } from 'crypto'
+import { randomBytes, createHash } from 'crypto'
 import { platform, release } from 'os'
 import { Logger } from 'pino'
 import { proto } from '../../WAProto'
 import { version as baileysVersion } from '../Defaults/baileys-version.json'
 import { BaileysEventEmitter, BaileysEventMap, DisconnectReason, WACallUpdateType, WAVersion } from '../Types'
-import { BinaryNode, getAllBinaryNodeChildren } from '../WABinary'
+import { BinaryNode, getAllBinaryNodeChildren, jidDecode } from '../WABinary'
 
 const PLATFORM_MAP = {
 	'aix': 'AIX',
