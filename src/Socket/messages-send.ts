@@ -303,7 +303,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 			)
 		)
 		return { nodes, shouldIncludeDeviceIdentity }
-	}
+	} //apela
 
 	const relayMessage = async(
 		jid: string,
