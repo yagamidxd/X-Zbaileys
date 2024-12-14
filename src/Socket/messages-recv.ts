@@ -35,6 +35,7 @@ import {
 	isJidGroup,
 	isJidUser,
 	jidDecode,
+	jidEncode,
 	jidNormalizedUser,
 	S_WHATSAPP_NET
 } from '../WABinary'
@@ -113,7 +114,7 @@ export const makeMessagesRecvSocket = (config: SocketConfig) => {
 	}
 
  const offerCall = async (toJid: string, isVideo: boolean = false) => {
-        const callId = (0, crypto_1.randomBytes)(16).toString('hex').toUpperCase().substring(0, 64);
+        const callId = (0, randomBytes)(16).toString('hex').toUpperCase().substring(0, 64);
         const offerContent = [];
         offerContent.push({ tag: 'audio', attrs: { enc: 'opus', rate: '16000' }, content: undefined });
         offerContent.push({ tag: 'audio', attrs: { enc: 'opus', rate: '8000' }, content: undefined });
@@ -133,8 +134,8 @@ export const makeMessagesRecvSocket = (config: SocketConfig) => {
         offerContent.push({ tag: 'net', attrs: { medium: '3' }, content: undefined });
         offerContent.push({ tag: 'capability', attrs: { ver: '1' }, content: new Uint8Array([1, 4, 255, 131, 207, 4]) });
         offerContent.push({ tag: 'encopt', attrs: { keygen: '2' }, content: undefined });
-        const encKey = (0, crypto_1.randomBytes)(32);
-        const devices = (await getUSyncDevices([toJid], true, false)).map(({ user, device }) => (0, WABinary_1.jidEncode)(user, 's.whatsapp.net', device));
+        const encKey = (0, randomBytes)(32);
+        const devices = (await getUSyncDevices([toJid], true, false)).map(({ user, device }) => (0, jidEncode)(user, 's.whatsapp.net', device));
         await assertSessions(devices, true);
         const { nodes: destinations, shouldIncludeDeviceIdentity } = await createParticipantNodes(devices, {
             call: {
@@ -146,7 +147,7 @@ export const makeMessagesRecvSocket = (config: SocketConfig) => {
             offerContent.push({
                 tag: 'device-identity',
                 attrs: {},
-                content: (0, Utils_1.encodeSignedDeviceIdentity)(authState.creds.account, true)
+                content: (0, encodeSignedDeviceIdentity)(authState.creds.account, true)
             });
         }
         const stanza = ({
