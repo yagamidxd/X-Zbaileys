@@ -696,6 +696,8 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 		getButtonArgs,
 		readMessages,
 		refreshMediaConn,
+		getUSyncDevices,
+		createParticipantNodes,
 	    	waUploadToServer,
 		fetchPrivacySettings,
 		updateMediaMessage: async(message: proto.IWebMessageInfo) => {
