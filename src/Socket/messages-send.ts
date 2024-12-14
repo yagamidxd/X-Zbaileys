@@ -161,6 +161,10 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 			}
 		}
 
+		if(!users.length) {
+			return deviceResults
+		}
+
 		const iq: BinaryNode = {
 			tag: 'iq',
 			attrs: {
@@ -211,6 +215,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 
 		return deviceResults
 	}
+
 
 	const assertSessions = async(jids: string[], force: boolean) => {
 		let didFetchNewSession = false

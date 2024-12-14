@@ -15,6 +15,7 @@ import {
 	derivePairingCodeKey,
 	encodeBigEndian,
 	encodeSignedDeviceIdentity,
+	generateMessageIDV2,
 	getCallStatusFromNode,
 	getHistoryMsg,
 	getNextPreKeys,
