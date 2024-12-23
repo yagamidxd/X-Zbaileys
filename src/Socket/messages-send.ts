@@ -819,13 +819,17 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 					}
 				} else if(isEditMsg) {
 					additionalAttributes.edit = isJidNewsLetter(jid) ? '3' : '1'
-				} else if(isAiMsg) {
-				    (additionalNodes as BinaryNode[]).push({
-                        attrs: {
-                            biz_bot: '1'
-                        },
-                        tag: "bot"
-                    })
+				} else if(isAiMsg && content.ai) {
+				    if(isJidUser) { 
+				       (additionalNodes as BinaryNode[]).push({
+                            attrs: {
+                                biz_bot: '1'
+                            },
+                            tag: "bot"
+                       })
+                    } else {
+                       additionalNodes = []
+                    }
 				}
 
 				if (mediaHandle) {

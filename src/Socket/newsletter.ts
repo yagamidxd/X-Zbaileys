@@ -150,7 +150,7 @@ export const makeNewsletterSocket = (config: SocketConfig) => {
 			await newsletterWMexQuery(jid, type.toUpperCase() as QueryIds)
 		},
 
-		newsletterCreate: async(name: string, description: string) => {
+		newsletterCreate: async(name: string, description: string, reaction_codes: string) => {
 			//TODO: Implement TOS system wide for Meta AI, communities, and here etc.
 			/**tos query */
 			await query({
@@ -173,7 +173,8 @@ export const makeNewsletterSocket = (config: SocketConfig) => {
 				]
 			})
 			const result = await newsletterWMexQuery(undefined, QueryIds.CREATE, {
-				input: { name, description }
+				input: { name, description },
+				settings: { 'reaction_codes': { value: reaction_codes } }
 			})
 
 			return extractNewsletterMetadata(result, true)
