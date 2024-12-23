@@ -74,9 +74,6 @@ type Templatable = {
 type Editable = {
   edit?: WAMessageKey
 }
-type Ai = {
-  ai?: boolean
-}
 type Listable = {
     /** Sections of the List */
     sections?: proto.Message.ListMessage.ISection[]
@@ -222,6 +219,7 @@ export type MiscMessageGenerationOptions = MinimalRelayOptions & {
 	timestamp?: Date
     /** the message you want to quote */
 	quoted?: WAMessage
+    additionalNodes?: BinaryNode[];
     /** disappearing messages settings */
     ephemeralExpiration?: number | string
     /** timeout for media upload to WA server */
