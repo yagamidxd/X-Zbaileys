@@ -173,7 +173,7 @@ export const makeNewsletterSocket = (config: SocketConfig) => {
 				]
 			})
 			const result = await newsletterWMexQuery(undefined, QueryIds.CREATE, {
-				input: { name, description, reaction_codes } }
+				input: { name, description, reaction_codes }
 			})
 
 			return extractNewsletterMetadata(result, true)
