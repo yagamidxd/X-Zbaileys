@@ -543,7 +543,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 					logger.debug({ jid }, 'adding device identity')
 				}
 				
-				if(additionalNodes && additionalNodes.length > 0) {
+				if(additionalNodes) {
                       (stanza.content as BinaryNode[]).push(...additionalNodes);
                 }
 
