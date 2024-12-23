@@ -806,7 +806,9 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 				)
 				const isDeleteMsg = 'delete' in content && !!content.delete
 				const isEditMsg = 'edit' in content && !!content.edit
+				const isAiMsg = 'ai' in content && !!content.ai
 				const additionalAttributes: BinaryNodeAttributes = { }
+				const additionalNodes = []
 				// required for delete
 				if(isDeleteMsg) {
 					// if the chat is a group, and I am not the author, then delete the message as an admin
@@ -817,6 +819,13 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 					}
 				} else if(isEditMsg) {
 					additionalAttributes.edit = isJidNewsLetter(jid) ? '3' : '1'
+				} else if(isAiMsg) {
+				    (additionalNodes as BinaryNode[]).push({
+                        attrs: {
+                            biz_bot: '1'
+                        },
+                        tag: "bot"
+                    })
 				}
 
 				if (mediaHandle) {
