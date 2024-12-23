@@ -74,6 +74,9 @@ type Templatable = {
 type Editable = {
   edit?: WAMessageKey
 }
+type Ai = {
+  ai?: boolean
+}
 type Listable = {
     /** Sections of the List */
     sections?: proto.Message.ListMessage.ISection[]
