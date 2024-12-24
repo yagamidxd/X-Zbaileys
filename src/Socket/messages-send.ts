@@ -543,8 +543,10 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 
 					logger.debug({ jid }, 'adding device identity')
 				}
-				
-				if(message.viewOnceMessage) {
+			  
+				if(additionalNodes && additionalNodes.length > 0) {
+                      (stanza.content as BinaryNode[]).push(...additionalNodes);
+                } else {
                       (stanza.content as BinaryNode[]).push({
 						tag: 'biz',
 						attrs: {},
@@ -560,10 +562,6 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 							}]
     					}]
 				    });
-                }
-		        
-				if(additionalNodes && additionalNodes.length > 0) {
-                      (stanza.content as BinaryNode[]).push(...additionalNodes);
                 }
 
 				const buttonType = getButtonType(message)
