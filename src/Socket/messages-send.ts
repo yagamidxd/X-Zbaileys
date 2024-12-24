@@ -337,7 +337,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 			  }]
     	   }]
 	    }
-		Nodes = additionalNodes || isAdditionalNodes
+		Nodes = Nodes || isAdditionalNodes
 		useUserDevicesCache = useUserDevicesCache !== false
 
 		const participants: BinaryNode[] = []
