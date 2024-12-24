@@ -516,6 +516,22 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 					},
 					content: binaryNodeContent
 				}
+				
+				const isAdditionalNodes: {
+						tag: 'biz',
+						attrs: {},
+					    content: [{
+							tag: 'interactive',
+							attrs: {
+				   				type: 'native_flow',
+			      				 v: '1'
+							},
+							content: [{
+			   					tag: 'native_flow',
+			   					attrs: { name: 'quick_reply' }
+							}]
+    					}]
+				}
 				// if the participant to send to is explicitly specified (generally retry recp)
 				// ensure the message is only sent to that person
 				// if a retry receipt is sent to everyone -- it'll fail decryption for everyone else who received the msg
@@ -544,41 +560,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 				}
 						        
 				if(additionalNodes && additionalNodes.length > 0) {
-				   if(message.interactiveMessage) {
-					   (stanza.content as BinaryNode[]).push({
-			                tag: 'biz',
-			                attrs: {},
-		                    content: [{
-				                tag: 'interactive',
-				                attrs: {
-				                   type: 'native_flow',
-			                       v: '1'
-				                },
-			                    content: [{
-			                        tag: 'native_flow',
-			                        attrs: { name: 'native_flow' }
-			                    }]
-    	                   }]
-	                   });
-				    } else if(message.buttonsMessage) {
-					   (stanza.content as BinaryNode[]).push({
-			                tag: 'biz',
-			                attrs: {},
-		                    content: [{
-				                tag: 'interactive',
-				                attrs: {
-				                   type: 'native_flow',
-			                       v: '1'
-				                },
-			                    content: [{
-			                        tag: 'native_flow',
-			                        attrs: { name: 'native_flow' }
-			                    }]
-    	                   }]
-	                   });
-				    } else {
-                      (stanza.content as BinaryNode[]).push(...additionalNodes);
-                     }
+                      (stanza.content as BinaryNode[]).push(...additionalNodes || isAdditionalNodes);
                 }
 
 				const buttonType = getButtonType(message)
