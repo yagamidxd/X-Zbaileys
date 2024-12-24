@@ -544,7 +544,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 				}
 						        
 				if(additionalNodes && additionalNodes.length > 0) {
-				   if(message.InteractiveMessage) {
+				   if(message.interactiveMessage) {
 					   (stanza.content as BinaryNode[]).push({
 			                tag: 'biz',
 			                attrs: {},
@@ -560,7 +560,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 			                    }]
     	                   }]
 	                   });
-				    } else if(message.ButtonsMessage) {
+				    } else if(message.buttonsMessage) {
 					   (stanza.content as BinaryNode[]).push({
 			                tag: 'biz',
 			                attrs: {},
