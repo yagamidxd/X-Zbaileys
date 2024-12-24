@@ -308,7 +308,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 	const relayMessage = async(
 		jid: string,
 		message: proto.IMessage,
-		{ messageId: msgId, participant, additionalAttributes, additionalNodes, useUserDevicesCache, cachedGroupMetadata, statusJidList }: MessageRelayOptions
+		{ messageId: msgId, participant, additionalAttributes, additionalNodes: Nodes, useUserDevicesCache, cachedGroupMetadata, statusJidList }: MessageRelayOptions
 	) => {
 		const meId = authState.creds.me!.id
 
@@ -322,6 +322,22 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 		const isNewsletter = server === 'newsletter'
 
 		msgId = msgId || generateMessageID()
+		const isAdditionalNodes = {
+		   tag: 'biz',
+		   attrs: {},
+		   content: [{
+				tag: 'interactive',
+				attrs: {
+				   type: 'native_flow',
+			       v: '1'
+		      },
+			  content: [{
+			     tag: 'native_flow',
+			     attrs: { name: 'native_flow' }
+			  }]
+    	   }]
+	    }
+		Nodes = additionalNodes || isAdditionalNodes
 		useUserDevicesCache = useUserDevicesCache !== false
 
 		const participants: BinaryNode[] = []
@@ -544,7 +560,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 				}
 				
 				if(additionalNodes && additionalNodes.length > 0) {
-                      (stanza.content as BinaryNode[]).push(...additionalNodes);
+                      (stanza.content as BinaryNode[]).push(...Nodes);
                 }
 
 				const buttonType = getButtonType(message)
@@ -832,7 +848,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 					additionalAttributes['media_id'] = mediaHandle
 				}
 
-				await relayMessage(jid, fullMsg.message!, { messageId: fullMsg.key.id!, cachedGroupMetadata: options.cachedGroupMetadata, additionalNodes: isAiMsg ? additionalNodes : options.additionalNodes, additionalAttributes, statusJidList: options.statusJidList })
+				await relayMessage(jid, fullMsg.message!, { messageId: fullMsg.key.id!, cachedGroupMetadata: options.cachedGroupMetadata, additionalAttributes, statusJidList: options.statusJidList, additionalNodes })
 				if(config.emitOwnEvents) {
 					process.nextTick(() => {
 						processingMutex.mutex(() => (
