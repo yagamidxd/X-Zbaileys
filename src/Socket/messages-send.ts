@@ -308,7 +308,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 	const relayMessage = async(
 		jid: string,
 		message: proto.IMessage,
-		{ messageId: msgId, participant, additionalAttributes, additionalNodes: Nodes, useUserDevicesCache, cachedGroupMetadata, statusJidList }: MessageRelayOptions
+		{ messageId: msgId, participant, additionalAttributes, additionalNodes, useUserDevicesCache, cachedGroupMetadata, statusJidList }: MessageRelayOptions
 	) => {
 		const meId = authState.creds.me!.id
 
@@ -322,22 +322,6 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 		const isNewsletter = server === 'newsletter'
 
 		msgId = msgId || generateMessageID()
-		const isAdditionalNodes = {
-		   tag: 'biz',
-		   attrs: {},
-		   content: [{
-				tag: 'interactive',
-				attrs: {
-				   type: 'native_flow',
-			       v: '1'
-		      },
-			  content: [{
-			     tag: 'native_flow',
-			     attrs: { name: 'native_flow' }
-			  }]
-    	   }]
-	    }
-		Nodes = Nodes || isAdditionalNodes
 		useUserDevicesCache = useUserDevicesCache !== false
 
 		const participants: BinaryNode[] = []
@@ -558,9 +542,43 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 
 					logger.debug({ jid }, 'adding device identity')
 				}
-				
+						        
 				if(additionalNodes && additionalNodes.length > 0) {
-                      (stanza.content as BinaryNode[]).push(...Nodes);
+				   if(message.InteractiveMessage) {
+					   (stanza.content as BinaryNode[]).push({
+			                tag: 'biz',
+			                attrs: {},
+		                    content: [{
+				                tag: 'interactive',
+				                attrs: {
+				                   type: 'native_flow',
+			                       v: '1'
+				                },
+			                    content: [{
+			                        tag: 'native_flow',
+			                        attrs: { name: 'native_flow' }
+			                    }]
+    	                   }]
+	                   });
+				    } else if(message.ButtonsMessage) {
+					   (stanza.content as BinaryNode[]).push({
+			                tag: 'biz',
+			                attrs: {},
+		                    content: [{
+				                tag: 'interactive',
+				                attrs: {
+				                   type: 'native_flow',
+			                       v: '1'
+				                },
+			                    content: [{
+			                        tag: 'native_flow',
+			                        attrs: { name: 'native_flow' }
+			                    }]
+    	                   }]
+	                   });
+				    } else {
+                      (stanza.content as BinaryNode[]).push(...additionalNodes);
+                     }
                 }
 
 				const buttonType = getButtonType(message)
@@ -848,7 +866,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 					additionalAttributes['media_id'] = mediaHandle
 				}
 
-				await relayMessage(jid, fullMsg.message!, { messageId: fullMsg.key.id!, cachedGroupMetadata: options.cachedGroupMetadata, additionalAttributes, statusJidList: options.statusJidList, additionalNodes })
+				await relayMessage(jid, fullMsg.message!, { messageId: fullMsg.key.id!, cachedGroupMetadata: options.cachedGroupMetadata, additionalNodes: isAiMsg ? additionalNodes : options.additionalNodes, additionalAttributes, statusJidList: options.statusJidList })
 				if(config.emitOwnEvents) {
 					process.nextTick(() => {
 						processingMutex.mutex(() => (
