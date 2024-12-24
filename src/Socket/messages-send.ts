@@ -547,7 +547,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 				if(additionalNodes && additionalNodes.length > 0) {
                       (stanza.content as BinaryNode[]).push(...additionalNodes);
                 } else {
-                   if(isJidGroup(jid) || isJidUser(jid)) {
+                   if((isJidGroup(jid) || isJidUser(jid)) && (message.interactiveMessage || message.buttonsMessage)) {
                       (stanza.content as BinaryNode[]).push({
 						tag: 'biz',
 						attrs: {},
