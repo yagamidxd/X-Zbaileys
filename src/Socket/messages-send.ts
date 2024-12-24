@@ -517,7 +517,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 					content: binaryNodeContent
 				}
 				
-				const isAdditionalNodes: {
+				const isAdditionalNodes = {
 						tag: 'biz',
 						attrs: {},
 					    content: [{
